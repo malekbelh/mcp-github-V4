@@ -15,6 +15,7 @@ import com.example.mcp_github.tools.commit.GitHubCommitTools;
 import com.example.mcp_github.tools.file.GitHubFileTools;
 import com.example.mcp_github.tools.issue.GitHubIssueTools;
 import com.example.mcp_github.tools.memory.MemoryTools;
+import com.example.mcp_github.tools.project.ProjectContextTools;
 import com.example.mcp_github.tools.pullrequest.GitHubPullRequestTools;
 import com.example.mcp_github.tools.release.GitHubReleaseTools;
 import com.example.mcp_github.tools.repository.GitHubRepositoryTools;
@@ -40,7 +41,8 @@ public class McpGithubApplication {
             GitHubReleaseTools releaseTools,
             GitHubActionsTools actionsTools,
             GitHubSocialTools socialTools,
-            MemoryTools memoryTools
+            MemoryTools memoryTools,
+            ProjectContextTools projectContextTools // ← 🆕
     ) {
         return Arrays.stream(new ToolCallback[][]{
             ToolCallbacks.from(repositoryTools),
@@ -53,7 +55,8 @@ public class McpGithubApplication {
             ToolCallbacks.from(releaseTools),
             ToolCallbacks.from(actionsTools),
             ToolCallbacks.from(socialTools),
-            ToolCallbacks.from(memoryTools)
+            ToolCallbacks.from(memoryTools),
+            ToolCallbacks.from(projectContextTools) // ← 🆕
         })
                 .flatMap(Arrays::stream)
                 .toList();
