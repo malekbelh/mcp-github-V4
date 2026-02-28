@@ -19,27 +19,27 @@ public class ProjectContextService {
             = Pattern.compile("url\\s*=\\s*git@github\\.com:([^/]+)/([^\\s\\.]+)");
 
     public Optional<GitProjectContext> detectFromCurrentDirectory() {
-        // Essaie d'abord user.dir
-        Optional<GitProjectContext> result = detectFromDirectory(System.getProperty("user.dir"));
 
-        // Si pas trouvé, essaie le Desktop
-        if (result.isEmpty()) {
-            String desktop = System.getProperty("user.home") + "\\Desktop";
-            File desktopDir = new File(desktop);
-            if (desktopDir.exists()) {
-                // Parcourt tous les dossiers du Desktop
-                File[] folders = desktopDir.listFiles(File::isDirectory);
-                if (folders != null) {
-                    for (File folder : folders) {
-                        result = detectFromDirectory(folder.getAbsolutePath());
-                        if (result.isPresent()) {
-                            return result;
-                        }
-                    }
-                }
+        // ✅ 1. Workspace VS Code / Antigravity (priorité maximale)
+        String vsCodeWorkspace = System.getenv("VSCODE_WORKSPACE");
+        if (vsCodeWorkspace != null && !vsCodeWorkspace.isBlank()) {
+            Optional<GitProjectContext> result = detectFromDirectory(vsCodeWorkspace);
+            if (result.isPresent()) {
+                return result;
             }
         }
-        return result;
+
+        // ✅ 2. Variable d'env manuelle (fallback)
+        String workspacePath = System.getenv("WORKSPACE_PATH");
+        if (workspacePath != null && !workspacePath.isBlank()) {
+            Optional<GitProjectContext> result = detectFromDirectory(workspacePath);
+            if (result.isPresent()) {
+                return result;
+            }
+        }
+
+        // ✅ 3. user.dir (dernier recours)
+        return detectFromDirectory(System.getProperty("user.dir"));
     }
 
     public Optional<GitProjectContext> detectFromDirectory(String path) {
