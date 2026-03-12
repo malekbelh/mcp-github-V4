@@ -70,8 +70,8 @@ public class MemoryService {
 
     @SuppressWarnings("unchecked")
     private Map<String, String> loadMemory() throws Exception {
-        File file = new File(memoryFilePath); // ✅ une seule méthode
-        if (!file.exists()) {
+        File file = new File(memoryFilePath);
+        if (!file.exists() || file.length() == 0) { // ← ajouter file.length() == 0
             return new HashMap<>();
         }
         return objectMapper.readValue(file, Map.class);

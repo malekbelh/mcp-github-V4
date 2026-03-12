@@ -20,7 +20,7 @@ public class ProjectContextService {
 
     public Optional<GitProjectContext> detectFromCurrentDirectory() {
 
-        // ✅ 1. Workspace VS Code / Antigravity (priorité maximale)
+        // ✅ 1. Workspace Antigravity (priorité maximale)
         String vsCodeWorkspace = System.getenv("VSCODE_WORKSPACE");
         if (vsCodeWorkspace != null && !vsCodeWorkspace.isBlank()) {
             Optional<GitProjectContext> result = detectFromDirectory(vsCodeWorkspace);
